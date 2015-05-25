@@ -1,28 +1,47 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+// The Strategy design pattern. El patrón de diseño Estrategia
+#include <iostream>
+using namespace std;
 
-# Precompiled Headers
-*.gch
-*.pch
+class NameStrategy {
+public:
+  virtual void greet() = 0;
+};
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+class SayHi : public NameStrategy {
+public:
+  void greet() {
+    cout << "Hola , Como va ?" << endl;
+  }
+};
 
-# Fortran module files
-*.mod
+class Ignore : public NameStrategy {
+public:
+  void greet() {
+    cout << "(Fingir que no te veo)" << endl;
+  }
+};
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+class Admission : public NameStrategy {
+public:
+  void greet() {
+    cout << "Lo siento he olvidado su nombre" << endl;
+  }
+};
 
-# Executables
-*.exe
-*.out
-*.app
+// The "Context" controls the strategy:(El contexto Controla la estrategia)
+class Context {
+  NameStrategy& strategy;
+public:
+  Context(NameStrategy& strat) : strategy(strat) {}
+  void greet() { strategy.greet(); }
+};
+
+int main() {
+  SayHi sayhi;
+  Ignore ignore;
+  Admission admission;
+  Context c1(sayhi), c2(ignore), c3(admission);
+  c1.greet();
+  c2.greet();
+  c3.greet();
+} ///:~
